@@ -1,7 +1,7 @@
 <project>
   <parent>
     <groupId>io.fossa.test</groupId>
-    <artifactId>fossa-maven-plugin-test-parent</artifactId>
+    <artifactId>fossa-maven-plugin-test-fixture-inheritance-parent</artifactId>
     <version>0.0.0-SNAPSHOT</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
@@ -9,5 +9,5 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>io.fossa.test</groupId>
-  <artifactId>fossa-maven-plugin-test-child</artifactId>
+  <artifactId>fossa-maven-plugin-test-fixture-inheritance-child</artifactId>
 </project>

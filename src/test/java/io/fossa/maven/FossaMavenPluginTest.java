@@ -17,9 +17,9 @@ import io.fossa.maven.Analysis.Dependency;
 import io.fossa.maven.FossaMavenPlugin.Result;
 
 public class FossaMavenPluginTest extends AbstractMojoTestCase {
-  public void testExecution() throws Exception {
+  private FossaMavenPlugin loadFixture(String path) throws Exception {
     // Load POM fixture.
-    File basedir = getTestFile("src/test/resources/unit/child");
+    File basedir = getTestFile(path);
     assertNotNull(basedir);
     assertTrue(basedir.exists());
 
@@ -28,15 +28,24 @@ public class FossaMavenPluginTest extends AbstractMojoTestCase {
     FossaMavenPlugin fossa = (FossaMavenPlugin) r.lookupConfiguredMojo(basedir, "analyze");
     assertNotNull(fossa);
 
-    // Test execution.
+    // Set test logger.
     fossa.setLog(new DefaultLog(new ConsoleLogger(Logger.LEVEL_DEBUG, "test-logger")));
+
+    return fossa;
+  }
+
+  public void testExecution() throws Exception {
+    // Load fixture.
+    FossaMavenPlugin fossa = loadFixture("src/test/resources/fixtures/inheritance/child");
+
+    // Test execution.
     fossa.execute();
 
     // Check result.
     Result result = fossa.getResult();
     assertEquals(1, result.output.size());
     Analysis analysis = result.output.iterator().next();
-    assertEquals("io.fossa.test:fossa-maven-plugin-test-child", analysis.Name);
+    assertEquals("io.fossa.test:fossa-maven-plugin-test-fixture-inheritance-child", analysis.Name);
 
     // Check imports.
     String[] expectedImports = new String[] {
@@ -71,5 +80,14 @@ public class FossaMavenPluginTest extends AbstractMojoTestCase {
         assertArrayEquals(expected, dep.imports);
       }
     }
+  }
+
+  public void testSkip() throws Exception {
+    // Load fixture.
+    FossaMavenPlugin fossa = loadFixture("src/test/resources/fixtures/skip/child");
+
+    // Test execution.
+    fossa.execute();
+    assertNull(fossa.getResult());
   }
 }

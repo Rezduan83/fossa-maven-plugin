@@ -73,6 +73,12 @@ public class FossaMavenPlugin extends AbstractMojo {
   @Parameter(property = "analyze.configurationFile")
   private File configurationFile;
 
+  @Parameter(property = "analyze.directory")
+  private File directory;
+
+  @Parameter(property = "analyze.skip")
+  private boolean skip;
+
   public static class Result {
     public int exitCode;
     public Collection<Analysis> output;
@@ -101,7 +107,13 @@ public class FossaMavenPlugin extends AbstractMojo {
     log.debug("apiKey: " + apiKey);
     log.debug("endpoint: " + endpoint);
     log.debug("configurationFile: " + configurationFile);
+    log.debug("skip: " + skip);
     log.debug("cwd: " + System.getProperty("user.dir"));
+
+    if (skip) {
+      log.info("Skipping FOSSA analysis");
+      return;
+    }
 
     // Load CLI.
     String cli;
@@ -122,6 +134,7 @@ public class FossaMavenPlugin extends AbstractMojo {
     // Execute CLI in current project.
     try {
       log.debug("Building command");
+
       // Build command: add flags.
       List<String> args = new LinkedList<String>();
       args.add(cli.toString());
@@ -152,6 +165,14 @@ public class FossaMavenPlugin extends AbstractMojo {
       Map<String, String> env = pb.environment();
       if (apiKey != null && apiKey.length() > 0) {
         env.put("FOSSA_API_KEY", apiKey);
+      }
+
+      // Build command: set CWD.
+      if (directory != null) {
+        pb.directory(directory);
+        log.debug("CLI CWD: " + pb.directory().getPath());
+      } else {
+        log.debug("CLI CWD: " + System.getProperty("user.dir"));
       }
 
       // Run command.

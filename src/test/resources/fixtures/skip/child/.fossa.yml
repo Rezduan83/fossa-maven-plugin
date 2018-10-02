@@ -8,7 +8,7 @@ cli:
   project: git@github.com:fossas/fossa-maven-plugin
 analyze:
   modules:
-  - name: io.fossa.test:fossa-maven-plugin-test-child
+  - name: io.fossa.test:fossa-maven-plugin-test-fixture-skip-child
     type: mvn
-    target: io.fossa.test:fossa-maven-plugin-test-child
+    target: io.fossa.test:fossa-maven-plugin-test-fixture-skip-child
     path: .
