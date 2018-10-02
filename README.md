@@ -34,7 +34,7 @@ You can install the FOSSA Maven plugin from GitHub using
       <plugin>
         <groupId>com.github.fossas</groupId>
         <artifactId>fossa-maven-plugin</artifactId>
-        <version>1.0.0</version>
+        <version>1.0.3</version>
         <configuration>
           <apiKey>your-key-here</apiKey>
         </configuration>
